@@ -3,6 +3,8 @@ import Box from '@mui/material/Box';
 import { apiGetPatientDetails } from '../api/ApplicationAPI';
 import { AuthenticationContext } from '../providers/Authentication';
 import { NameDisplayConvention, NameDisplayPerson } from './NameDisplayConvention';
+import CircularProgress from '@mui/material/CircularProgress';
+import Backdrop from '@mui/material/Backdrop';
 
 
 interface TabPanelProps {
@@ -30,7 +32,6 @@ function TabPanel(props: TabPanelProps) {
     </div>
   );
 }
-
 
 export interface PatientProps extends NameDisplayPerson {
   age: number;
@@ -72,14 +73,15 @@ export default function PatientDetails(props: PatientDetailsProps): JSX.Element 
     sex: 'Unknown'
   });
 
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     async function getPatientDetails(patientId: string) {
+      setIsLoading(true);
       const patientDetails = await apiGetPatientDetails(authData.sessionToken, patientId);
       const resultBody = await patientDetails.json();
       setPatientDetails(resultBody);
-      setIsLoaded(true);
+      setIsLoading(false);
     }
 
     if (props.id) {
@@ -91,7 +93,7 @@ export default function PatientDetails(props: PatientDetailsProps): JSX.Element 
   return (
     <TabPanel value={props.chosenPatientIndex} index={props.index}>
       {
-        isLoaded &&
+        !isLoading &&
           <Box
               display="flex"
               flexDirection="column"
@@ -110,6 +112,12 @@ export default function PatientDetails(props: PatientDetailsProps): JSX.Element 
             </ProperlyAlignedBox>
           </Box>
       }
+        <Backdrop
+          sx={{ color: '#fff' }}
+          open={isLoading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
     </TabPanel>
   )
 };

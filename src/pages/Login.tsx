@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import { AuthenticationContext } from '../providers/Authentication';
 import { apiLogin } from '../api/ApplicationAPI';
 
@@ -11,12 +13,14 @@ export default function LoginPage(): JSX.Element {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const { login } = useContext(AuthenticationContext);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError('');
+    setIsLoading(true);
     const result = await apiLogin(username, password);
     const resultBody = await result.json();
     if (result.status === 200) {
@@ -24,6 +28,7 @@ export default function LoginPage(): JSX.Element {
     } else {
       setError(resultBody.errorMessage);
     }
+    setIsLoading(false);
   }
 
 
@@ -74,6 +79,12 @@ export default function LoginPage(): JSX.Element {
           </Button>
         </Box>
       </form>
+      <Backdrop
+        sx={{ color: '#fff' }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Box>
   );
 };

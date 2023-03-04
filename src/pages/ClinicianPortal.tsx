@@ -27,17 +27,13 @@ export default function ClinicianPortalPage(): JSX.Element {
   useEffect(() => {
     async function getClinicianDetails() {
       const clinicianDetails = await apiGetClinicianDetails(authData.sessionToken);
-      console.log('clinicianDetails', clinicianDetails);
       const resultBody = await clinicianDetails.json();
-      console.log('clinicianDetails body', resultBody);
       setClinician(resultBody);
     }
 
     async function getPatients() {
       const patients = await apiGetPatients(authData.sessionToken);
-      console.log('patients', patients);
       const resultBody = await patients.json();
-      console.log('patients body', resultBody);
       setPatients(resultBody);
     }
 

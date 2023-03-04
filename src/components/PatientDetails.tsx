@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import Box from '@mui/material/Box';
 import { apiGetPatientDetails } from '../api/ApplicationAPI';
 import { AuthenticationContext } from '../providers/Authentication';
-import { NameDisplayConvention, NameDisplayPerson } from '../NameDisplayConvention';
+import { NameDisplayConvention, NameDisplayPerson } from './NameDisplayConvention';
 
 
 interface TabPanelProps {
@@ -76,11 +76,8 @@ export default function PatientDetails(props: PatientDetailsProps): JSX.Element 
 
   useEffect(() => {
     async function getPatientDetails(patientId: string) {
-      console.log('getPatientDetails', authData.sessionToken, patientId);
       const patientDetails = await apiGetPatientDetails(authData.sessionToken, patientId);
-      console.log('patientDetails', patientDetails);
       const resultBody = await patientDetails.json();
-      console.log('patientDetails body', resultBody);
       setPatientDetails(resultBody);
       setIsLoaded(true);
     }

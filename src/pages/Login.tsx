@@ -1,7 +1,8 @@
 import React, { useState, useContext, FormEvent } from "react";
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { AuthenticationContext } from '../providers/Authentication';
 import { apiLogin } from '../api/ApplicationAPI';
@@ -9,20 +10,19 @@ import { apiLogin } from '../api/ApplicationAPI';
 export default function LoginPage(): JSX.Element {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
   const { login } = useContext(AuthenticationContext);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    console.log('username: ', username, ' password: ', password);
+    setError('');
     const result = await apiLogin(username, password);
-    console.log('fetch done', result);
     const resultBody = await result.json();
-    console.log('body', resultBody);
     if (result.status === 200) {
       await login(resultBody);
     } else {
-      // TODO show user error message
-      console.error(resultBody.errorMessage);
+      setError(resultBody.errorMessage);
     }
   }
 
@@ -51,6 +51,10 @@ export default function LoginPage(): JSX.Element {
           <Typography variant="h2">
             Sign In
           </Typography>
+          {
+            error &&
+              <Alert severity="error">{error}</Alert>
+          }
           <TextField
             label="Username"
             variant="outlined"

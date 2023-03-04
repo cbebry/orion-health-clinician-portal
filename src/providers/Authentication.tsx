@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Constants from '../shared/Constants';
 
 export interface AuthData {
   sessionToken: string
@@ -14,12 +15,12 @@ const setupProviderValue = () => {
 
   const login = async (loginAuthData: AuthData) => {
     setAuthData(loginAuthData);
-    navigate('/portal');
+    navigate(Constants.ROUTES.PORTAL);
   }
   // Might not end up using this for the assessment, but doesn't hurt to have on hand in case
   const logout = async () => {
     setAuthData({ sessionToken: '' });
-    navigate('/', { replace: true });
+    navigate(Constants.ROUTES.LOGIN, { replace: true });
   }
 
   return useMemo( () => ({

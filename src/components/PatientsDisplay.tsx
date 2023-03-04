@@ -22,8 +22,6 @@ function a11yProps(index: number) {
 }
 
 export function PatientsDisplay(props: PatientsDisplayProps): JSX.Element {
-  console.log('PatientsDisplay props', props);
-
   const [chosenPatientIndex, setChosenPatientIndex] = useState<number | boolean>(false);
 
   const handleChange = (event: React.SyntheticEvent, newChosenPatientIndex: number | boolean) => {

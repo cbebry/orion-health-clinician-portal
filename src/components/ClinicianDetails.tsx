@@ -1,7 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { NameDisplayConvention, NameDisplayPerson } from '../NameDisplayConvention';
+import { NameDisplayConvention, NameDisplayPerson } from './NameDisplayConvention';
 
 export interface ClinicianDetailsProps extends NameDisplayPerson {
   username: string;

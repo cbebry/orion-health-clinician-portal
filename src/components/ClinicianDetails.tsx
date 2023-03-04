@@ -19,12 +19,21 @@ export function ClinicianDetails(props: ClinicianDetailsProps): JSX.Element {
       flexDirection="column"
     >
       <Box>
-        <Typography variant="h2">
+        <Typography
+          component="h2"
+          variant="h3"
+          sx={{
+            textAlign: 'center'
+          }}
+        >
           <NameDisplayConvention {...props} />
         </Typography>
       </Box>
       <Box>
-        <Typography variant="h3">
+        <Typography
+          component="h3"
+          variant="h4"
+        >
           {props.role}
         </Typography>
       </Box>

@@ -36,10 +36,6 @@ export default function LoginPage(): JSX.Element {
     >
       <form onSubmit={handleSubmit}>
         <Box
-          sx={{
-            width: 600,
-            height: 300
-          }}
           display="flex"
           flexDirection="column"
           justifyContent="center"

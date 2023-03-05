@@ -6,7 +6,6 @@ import { NameDisplayConvention, NameDisplayPerson } from './NameDisplayConventio
 import CircularProgress from '@mui/material/CircularProgress';
 import Backdrop from '@mui/material/Backdrop';
 
-
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -56,7 +55,7 @@ function ProperlyAlignedBox(props: ProperlyAlignedBoxProps) {
       justifyContent="flex-start"
       alignItems="center"
       paddingLeft="5px"
-      width="25%"
+      minWidth="25%"
     >
       {props.children}
     </Box>
@@ -78,9 +77,15 @@ export default function PatientDetails(props: PatientDetailsProps): JSX.Element 
   useEffect(() => {
     async function getPatientDetails(patientId: string) {
       setIsLoading(true);
-      const patientDetails = await apiGetPatientDetails(authData.sessionToken, patientId);
-      const resultBody = await patientDetails.json();
-      setPatientDetails(resultBody);
+      try {
+        const patientDetails = await apiGetPatientDetails(authData.sessionToken, patientId);
+        const resultBody = await patientDetails.json();
+        setPatientDetails(resultBody);
+      } catch (e) {
+        // fetch generally includes handling and messages for regular http status errors in the result body.
+        // this is for catching strange network errors just to be safe, and in the real world we'd do something about it.
+        console.error(e);
+      }
       setIsLoading(false);
     }
 
@@ -95,20 +100,20 @@ export default function PatientDetails(props: PatientDetailsProps): JSX.Element 
       {
         !isLoading &&
           <Box
-              display="flex"
-              flexDirection="column"
-              justifyContent="center"
-              alignItems="center"
-              height="400px"
+            display="flex"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            height="400px"
           >
             <ProperlyAlignedBox>
               <NameDisplayConvention {...patientDetails} />
             </ProperlyAlignedBox>
             <ProperlyAlignedBox>
-                <span>Age: {patientDetails.age}</span>
+              <span>Age: {patientDetails.age}</span>
             </ProperlyAlignedBox>
             <ProperlyAlignedBox>
-                <span>Sex: {patientDetails.sex}</span>
+              <span>Sex: {patientDetails.sex}</span>
             </ProperlyAlignedBox>
           </Box>
       }

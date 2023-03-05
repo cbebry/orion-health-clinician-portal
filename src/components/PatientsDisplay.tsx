@@ -22,6 +22,8 @@ function a11yProps(index: number) {
 }
 
 export function PatientsDisplay(props: PatientsDisplayProps): JSX.Element {
+  // We default chosenPatientIndex to false because no patient is selected at first.
+  // This is why it is number | boolean, as the Tabs component supports false or tab index.
   const [chosenPatientIndex, setChosenPatientIndex] = useState<number | boolean>(false);
 
   const handleChange = (event: React.SyntheticEvent, newChosenPatientIndex: number | boolean) => {
@@ -38,21 +40,39 @@ export function PatientsDisplay(props: PatientsDisplayProps): JSX.Element {
         <Tabs value={chosenPatientIndex} variant="fullWidth" onChange={handleChange} aria-label="Patients List">
           {
             props.patients.map((patientIndex, index) =>
-              (<Tab key={patientIndex.id} label={`${patientIndex.name} (${patientIndex.id})`} {...a11yProps(index)} />)
+              (
+                <Tab
+                  key={patientIndex.id}
+                  label={`${patientIndex.name} (${patientIndex.id})`}
+                  sx={{
+                    '&.Mui-selected': {
+                      backgroundColor: '#e6e6e6'
+                    },
+                    '&.Mui-selected:hover': {
+                      backgroundColor: '#dcdcdc'
+                    },
+                    '&:hover': {
+                      backgroundColor: '#f0f0f0'
+                    }
+                  }}
+                  {...a11yProps(index)}
+                />
+              )
             )
           }
         </Tabs>
       </Box>
-      {chosenPatientIndex !== false &&
-        props.patients.map((patientIndex, index) =>
-        {
-          return chosenPatientIndex === index &&
-            (<PatientDetails
-              key={patientIndex.id}
-              {...{ index, id: patientIndex.id, name: patientIndex.name, chosenPatientIndex } }
-            />)
-        }
-        )
+      {
+        chosenPatientIndex !== false &&
+          props.patients.map((patientIndex, index) => {
+            return chosenPatientIndex === index &&
+              (
+                <PatientDetails
+                  key={patientIndex.id}
+                  {...{ index, id: patientIndex.id, name: patientIndex.name, chosenPatientIndex } }
+                />
+              )
+          })
       }
     </Box>
   );

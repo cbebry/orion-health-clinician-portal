@@ -21,16 +21,24 @@ export default function LoginPage(): JSX.Element {
     event.preventDefault();
     setError('');
     setIsLoading(true);
-    const result = await apiLogin(username, password);
-    const resultBody = await result.json();
-    if (result.status === 200) {
-      await login(resultBody);
-    } else {
-      setError(resultBody.errorMessage);
+    try {
+      const result = await apiLogin(username, password);
+      const resultBody = await result.json();
+      if (result.status === 200) {
+        await login(resultBody);
+      } else {
+        setError(resultBody.errorMessage);
+      }
+    } catch (e) {
+      // fetch generally includes handling and messages for regular http status errors in the result body.
+      // this is for catching strange network errors just to be safe, and in the real world we'd do something about it.
+      console.error(e);
+      // Is it just me, or does typescript not have a great way of typing catched errors?
+      setError((e as Error).message);
     }
+
     setIsLoading(false);
   }
-
 
   return (
     <Box

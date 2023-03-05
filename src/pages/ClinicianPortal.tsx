@@ -31,20 +31,31 @@ export default function ClinicianPortalPage(): JSX.Element {
   useEffect(() => {
     async function getClinicianDetails() {
       setClinicianIsLoading(true);
-      const clinicianDetails = await apiGetClinicianDetails(authData.sessionToken);
-      const resultBody = await clinicianDetails.json();
-      setClinician(resultBody);
+      try {
+        const clinicianDetails = await apiGetClinicianDetails(authData.sessionToken);
+        const resultBody = await clinicianDetails.json();
+        setClinician(resultBody);
+      } catch (e) {
+        // fetch generally includes handling and messages for regular http status errors in the result body.
+        // this is for catching strange network errors just to be safe, and in the real world we'd do something about it.
+        console.error(e);
+      }
       setClinicianIsLoading(false);
     }
 
     async function getPatients() {
       setPatientListIsLoading(true);
-      const patients = await apiGetPatients(authData.sessionToken);
-      const resultBody = await patients.json();
-      setPatients(resultBody);
+      try {
+        const patients = await apiGetPatients(authData.sessionToken);
+        const resultBody = await patients.json();
+        setPatients(resultBody);
+      } catch (e) {
+        // fetch generally includes handling and messages for regular http status errors in the result body.
+        // this is for catching strange network errors just to be safe, and in the real world we'd do something about it.
+        console.error(e);
+      }
       setPatientListIsLoading(false);
     }
-
 
     // In an ideal situation, we can launch these AJAX calls in parallel so they don't await in series
     getClinicianDetails();
